@@ -6,28 +6,28 @@ import { galleryItems } from './gallery-items';
 
 console.log(galleryItems);
 
-const galleryList = document.querySelector('.gallery');
+const gallery = document.querySelector('.gallery');
+const items = [];
+gallery.style.listStyle = `none`;
 
-const galleryElements = galleryItems
-  .map(picture => {
-    return `<a class="gallery__item" href="${picture.original}">
-       <img
-        class="gallery__image"
-         src="${picture.preview}"
+galleryItems.forEach(element => {
+  const galleryItem = document.createElement('li');
+  const galleryLink = document.createElement('a');
+  galleryLink.className = 'gallery__link';
+  galleryLink.href = element.original;
+  const galleryImage = document.createElement('img');
+  galleryImage.className = 'gallery__image';
+  galleryImage.src = element.preview;
+  galleryImage.setAttribute('title', element.description);
+  galleryImage.alt = element.description;
 
-         alt="${picture.description}"
-       />
-     </a>
-   `;
-  })
-  .join('');
+  galleryItem.append(galleryLink);
+  galleryLink.append(galleryImage);
+  items.push(galleryItem);
+});
 
-galleryList.innerHTML = galleryElements;
+gallery.append(...items);
 
-const lightbox = new SimpleLightbox('.gallery a', {
-  captionSelector: 'self',
-  captionType: 'attr',
-  captionsData: 'alt',
-  captionPosition: 'bottom',
+new SimpleLightbox('.gallery a', {
   captionDelay: 250,
 });
